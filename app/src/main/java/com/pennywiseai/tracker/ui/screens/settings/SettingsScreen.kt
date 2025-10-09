@@ -570,7 +570,7 @@ fun SettingsScreen(
         val unreportedCount by settingsViewModel.unreportedSmsCount.collectAsStateWithLifecycle()
         
         if (unreportedCount > 0) {
-            SectionHeader(title = "Help Improve PennyWise")
+            SectionHeader(title = "Help Improve FinWise")
             
             PennyWiseCard(
                 modifier = Modifier.fillMaxWidth(),
@@ -618,38 +618,8 @@ fun SettingsScreen(
                 }
             }
         }
-        
-        // Developer Section
-        SectionHeader(title = "Developer")
-        
-        PennyWiseCard(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimensions.Padding.content),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Developer Mode",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = "Show technical information in chat",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Switch(
-                    checked = isDeveloperModeEnabled,
-                    onCheckedChange = { settingsViewModel.toggleDeveloperMode(it) }
-                )
-            }
-        }
+
+
         
 
 

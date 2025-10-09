@@ -229,7 +229,7 @@ class LlmRepository @Inject constructor(
         val upcomingPayments = activeSubs.filter { it.nextPaymentDays <= 7 }
         
         return """
-        You are PennyWise AI, a friendly financial assistant helping users track expenses and manage money.
+        You are FinWise AI, a friendly financial assistant helping users track expenses and manage money.
         
         Current Financial Overview (${context.currentDate}):
         - This month: ${CurrencyUtils.formatCurrency(monthSummary.totalExpense)} spent, ${CurrencyUtils.formatCurrency(monthSummary.totalIncome)} income
@@ -279,7 +279,7 @@ class LlmRepository @Inject constructor(
         val activeSubs = chatContext.activeSubscriptions
         
         return """
-        Hi! I'm PennyWise AI, your financial assistant.
+        Hi! I'm FinWise AI, your financial assistant.
         
         I have access to:
         • Your last 2 weeks of transactions ($recentCount recent ones)
