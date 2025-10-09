@@ -651,78 +651,9 @@ fun SettingsScreen(
             }
         }
         
-        // Support Section
-        SectionHeader(title = "Support & Community")
-        
-        val context = LocalContext.current
-        
-        PennyWiseCard(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                // Help & FAQ
-                ListItem(
-                    headlineContent = { 
-                        Text(
-                            text = "Help & FAQ",
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    supportingContent = { 
-                        Text("Frequently asked questions and help")
-                    },
-                    leadingContent = {
-                        Icon(
-                            Icons.AutoMirrored.Filled.Help,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    },
-                    trailingContent = {
-                        Icon(
-                            Icons.Default.ChevronRight,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    },
-                    modifier = Modifier.clickable { onNavigateToFaq() }
-                )
-                
-                HorizontalDivider()
-                
-                // GitHub Issues
-                ListItem(
-                    headlineContent = { 
-                        Text(
-                            text = "Report an Issue",
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    supportingContent = { 
-                        Text("Submit bug reports or bank requests on GitHub")
-                    },
-                    leadingContent = {
-                        Icon(
-                            Icons.Default.BugReport,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    },
-                    trailingContent = {
-                        Icon(
-                            Icons.AutoMirrored.Filled.OpenInNew,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    },
-                    modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sarim2000/pennywiseai-tracker/issues/new/choose"))
-                        context.startActivity(intent)
-                    }
-                )
-            }
-        }
+
+
+
     }
 
     // SMS Scan Period Dialog

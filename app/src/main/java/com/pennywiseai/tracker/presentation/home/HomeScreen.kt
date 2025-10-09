@@ -91,7 +91,7 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
 
     // Currency dropdown state
-      
+
     // Check for app updates and reviews when the screen is first displayed
     LaunchedEffect(Unit) {
         // Refresh account balances to ensure proper currency conversion
@@ -99,32 +99,32 @@ fun HomeScreen(
 
         activity?.let {
             val componentActivity = it as ComponentActivity
-            
+
             // Check for app updates
             viewModel.checkForAppUpdate(
                 activity = componentActivity,
                 snackbarHostState = snackbarHostState,
                 scope = scope
             )
-            
+
             // Check for in-app review eligibility
             viewModel.checkForInAppReview(componentActivity)
         }
     }
-    
+
     // Refresh hidden accounts whenever this screen becomes visible
     // This ensures changes from ManageAccountsScreen are reflected immediately
     DisposableEffect(Unit) {
         viewModel.refreshHiddenAccounts()
         onDispose { }
     }
-    
+
     // Handle delete undo snackbar
     LaunchedEffect(deletedTransaction) {
         deletedTransaction?.let { transaction ->
             // Clear the state immediately to prevent re-triggering
             viewModel.clearDeletedTransaction()
-            
+
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = "Transaction deleted",
@@ -138,198 +138,198 @@ fun HomeScreen(
             }
         }
     }
-    
+
     // Clear snackbar when navigating away
     DisposableEffect(Unit) {
         onDispose {
             snackbarHostState.currentSnackbarData?.dismiss()
         }
     }
-    
+
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(0.dp)) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                start = Dimensions.Padding.content,
-                end = Dimensions.Padding.content,
-                top = Dimensions.Padding.content,
-                bottom = Dimensions.Padding.content + 80.dp // Space for FAB
-            ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.md)
-        ) {
-            // Transaction Summary Cards with HorizontalPager
-            item {
-                TransactionSummaryCards(
-                    uiState = uiState,
-                    onCurrencySelected = { viewModel.selectCurrency(it) }
-                )
-            }
-            
-            // Unified Accounts Section (Credit Cards + Bank Accounts)
-            if (uiState.creditCards.isNotEmpty() || uiState.accountBalances.isNotEmpty()) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    start = Dimensions.Padding.content,
+                    end = Dimensions.Padding.content,
+                    top = Dimensions.Padding.content,
+                    bottom = Dimensions.Padding.content + 80.dp // Space for FAB
+                ),
+                verticalArrangement = Arrangement.spacedBy(Spacing.md)
+            ) {
+                // Transaction Summary Cards with HorizontalPager
                 item {
-                    UnifiedAccountsCard(
-                        creditCards = uiState.creditCards,
-                        bankAccounts = uiState.accountBalances,
-                        totalBalance = uiState.totalBalance,
-                        totalAvailableCredit = uiState.totalAvailableCredit,
-                        selectedCurrency = uiState.selectedCurrency,
-                        onAccountClick = { bankName, accountLast4 ->
-                            navController.navigate(
-                                com.pennywiseai.tracker.navigation.AccountDetail(
-                                    bankName = bankName,
-                                    accountLast4 = accountLast4
+                    TransactionSummaryCards(
+                        uiState = uiState,
+                        onCurrencySelected = { viewModel.selectCurrency(it) }
+                    )
+                }
+
+                // Unified Accounts Section (Credit Cards + Bank Accounts)
+                if (uiState.creditCards.isNotEmpty() || uiState.accountBalances.isNotEmpty()) {
+                    item {
+                        UnifiedAccountsCard(
+                            creditCards = uiState.creditCards,
+                            bankAccounts = uiState.accountBalances,
+                            totalBalance = uiState.totalBalance,
+                            totalAvailableCredit = uiState.totalAvailableCredit,
+                            selectedCurrency = uiState.selectedCurrency,
+                            onAccountClick = { bankName, accountLast4 ->
+                                navController.navigate(
+                                    com.pennywiseai.tracker.navigation.AccountDetail(
+                                        bankName = bankName,
+                                        accountLast4 = accountLast4
+                                    )
                                 )
-                            )
-                        }
-                    )
+                            }
+                        )
+                    }
                 }
-            }
-            
-            // Upcoming Subscriptions Alert
-            if (uiState.upcomingSubscriptions.isNotEmpty()) {
+
+                // Upcoming Subscriptions Alert
+                if (uiState.upcomingSubscriptions.isNotEmpty()) {
+                    item {
+                        UpcomingSubscriptionsCard(
+                            subscriptions = uiState.upcomingSubscriptions,
+                            totalAmount = uiState.upcomingSubscriptionsTotal,
+                            onClick = onNavigateToSubscriptions
+                        )
+                    }
+                }
+
+                // Recent Transactions Section
                 item {
-                    UpcomingSubscriptionsCard(
-                        subscriptions = uiState.upcomingSubscriptions,
-                        totalAmount = uiState.upcomingSubscriptionsTotal,
-                        onClick = onNavigateToSubscriptions
-                    )
-                }
-            }
-            
-            // Recent Transactions Section
-            item {
-                SectionHeader(
-                    title = "Recent Transactions",
-                    action = {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Search button
-                            IconButton(
-                                onClick = onNavigateToTransactionsWithSearch,
-                                modifier = Modifier.size(36.dp)
+                    SectionHeader(
+                        title = "Recent Transactions",
+                        action = {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "Search transactions",
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                            
-                            // View All button
-                            TextButton(onClick = onNavigateToTransactions) {
-                                Text("View All")
+                                // Search button
+                                IconButton(
+                                    onClick = onNavigateToTransactionsWithSearch,
+                                    modifier = Modifier.size(36.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "Search transactions",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+
+                                // View All button
+                                TextButton(onClick = onNavigateToTransactions) {
+                                    Text("View All")
+                                }
                             }
                         }
-                    }
-                )
-            }
-            
-            if (uiState.isLoading) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(Dimensions.Component.minTouchTarget * 2),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    )
                 }
-            } else if (uiState.recentTransactions.isEmpty()) {
-                item {
-                    PennyWiseCard(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+
+                if (uiState.isLoading) {
+                    item {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(Dimensions.Padding.empty),
+                                .height(Dimensions.Component.minTouchTarget * 2),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = "No transactions yet",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            CircularProgressIndicator()
                         }
                     }
+                } else if (uiState.recentTransactions.isEmpty()) {
+                    item {
+                        PennyWiseCard(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(Dimensions.Padding.empty),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "No transactions yet",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    items(
+                        items = uiState.recentTransactions,
+                        key = { it.id }
+                    ) { transaction ->
+                        SimpleTransactionItem(
+                            transaction = transaction,
+                            onClick = { onTransactionClick(transaction.id) }
+                        )
+                    }
                 }
-            } else {
-                items(
-                    items = uiState.recentTransactions,
-                    key = { it.id }
-                ) { transaction ->
-                    SimpleTransactionItem(
-                        transaction = transaction,
-                        onClick = { onTransactionClick(transaction.id) }
+            }
+
+            // FABs - Direct access (no speed dial)
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(Dimensions.Padding.content),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                // Add FAB (top, small)
+                SmallFloatingActionButton(
+                    onClick = onNavigateToAddScreen,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Transaction or Subscription"
+                    )
+                }
+
+                // Sync FAB (bottom, primary)
+                FloatingActionButton(
+                    onClick = { viewModel.scanSmsMessages() },
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.spotlightTarget(onFabPositioned)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Sync,
+                        contentDescription = "Sync SMS"
                     )
                 }
             }
-        }
-        
-        // FABs - Direct access (no speed dial)
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(Dimensions.Padding.content),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            // Add FAB (top, small)
-            SmallFloatingActionButton(
-                onClick = onNavigateToAddScreen,
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Transaction or Subscription"
-                )
-            }
-            
-            // Sync FAB (bottom, primary)
-            FloatingActionButton(
-                onClick = { viewModel.scanSmsMessages() },
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.spotlightTarget(onFabPositioned)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Sync,
-                    contentDescription = "Sync SMS"
-                )
-            }
-        }
-        
-        // SMS Parsing Progress Dialog
-        SmsParsingProgressDialog(
-            isVisible = uiState.isScanning,
-            workInfo = smsScanWorkInfo,
-            onDismiss = { viewModel.cancelSmsScan() },
-            onCancel = { viewModel.cancelSmsScan() }
-        )
-        
-        // Breakdown Dialog
-        if (uiState.showBreakdownDialog) {
-            BreakdownDialog(
-                currentMonthIncome = uiState.currentMonthIncome,
-                currentMonthExpenses = uiState.currentMonthExpenses,
-                currentMonthTotal = uiState.currentMonthTotal,
-                lastMonthIncome = uiState.lastMonthIncome,
-                lastMonthExpenses = uiState.lastMonthExpenses,
-                lastMonthTotal = uiState.lastMonthTotal,
-                onDismiss = { viewModel.hideBreakdownDialog() }
+
+            // SMS Parsing Progress Dialog
+            SmsParsingProgressDialog(
+                isVisible = uiState.isScanning,
+                workInfo = smsScanWorkInfo,
+                onDismiss = { viewModel.cancelSmsScan() },
+                onCancel = { viewModel.cancelSmsScan() }
             )
+
+            // Breakdown Dialog
+            if (uiState.showBreakdownDialog) {
+                BreakdownDialog(
+                    currentMonthIncome = uiState.currentMonthIncome,
+                    currentMonthExpenses = uiState.currentMonthExpenses,
+                    currentMonthTotal = uiState.currentMonthTotal,
+                    lastMonthIncome = uiState.lastMonthIncome,
+                    lastMonthExpenses = uiState.lastMonthExpenses,
+                    lastMonthTotal = uiState.lastMonthTotal,
+                    onDismiss = { viewModel.hideBreakdownDialog() }
+                )
+            }
         }
-    }
     }
 }
 
@@ -346,10 +346,10 @@ private fun SimpleTransactionItem(
         TransactionType.TRANSFER -> if (!isSystemInDarkTheme()) transfer_light else transfer_dark
         TransactionType.INVESTMENT -> if (!isSystemInDarkTheme()) investment_light else investment_dark
     }
-    
+
     val dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d • h:mm a")
     val dateTimeText = transaction.dateTime.format(dateTimeFormatter)
-    
+
     ListItemCard(
         title = transaction.merchantName,
         subtitle = dateTimeText,
@@ -387,12 +387,12 @@ private fun MonthSummaryCard(
     } else {
         if (!isSystemInDarkTheme()) expense_light else expense_dark
     }
-    
+
     val expenseChange = currentExpenses - lastExpenses
     val now = LocalDate.now()
     val lastMonth = now.minusMonths(1)
     val periodLabel = "vs ${lastMonth.month.name.lowercase().replaceFirstChar { it.uppercase() }} 1-${now.dayOfMonth}"
-    
+
     val subtitle = when {
         // No transactions yet
         currentExpenses == BigDecimal.ZERO && lastExpenses == BigDecimal.ZERO -> {
@@ -415,7 +415,7 @@ private fun MonthSummaryCard(
             "Same as last period"
         }
     }
-    
+
     val currentMonth = now.month.name.lowercase().replaceFirstChar { it.uppercase() }
 
     // Currency symbol mapping for display
@@ -429,7 +429,7 @@ private fun MonthSummaryCard(
     val currencySymbol = currencySymbols[currency] ?: currency
 
     val titleText = "Net Balance ($currencySymbol) • $currentMonth 1-${now.dayOfMonth}"
-    
+
     SummaryCard(
         title = titleText,
         amount = displayAmount,
@@ -451,7 +451,7 @@ private fun TransactionItem(
         TransactionType.TRANSFER -> if (!isSystemInDarkTheme()) transfer_light else transfer_dark
         TransactionType.INVESTMENT -> if (!isSystemInDarkTheme()) investment_light else investment_dark
     }
-    
+
     // Get subtle background color based on transaction type
     val cardBackgroundColor = when (transaction.transactionType) {
         TransactionType.CREDIT -> (if (!isSystemInDarkTheme()) credit_light else credit_dark).copy(alpha = 0.05f)
@@ -460,7 +460,7 @@ private fun TransactionItem(
         TransactionType.INCOME -> (if (!isSystemInDarkTheme()) income_light else income_dark).copy(alpha = 0.03f)
         else -> Color.Transparent // Default for regular expenses
     }
-    
+
     ListItemCard(
         title = transaction.merchantName,
         subtitle = transaction.dateTime.format(DateTimeFormatter.ofPattern("MMM d, h:mm a")),
@@ -512,7 +512,7 @@ private fun TransactionItem(
                         tint = if (!isSystemInDarkTheme()) expense_light else expense_dark
                     )
                 }
-                
+
                 // Always show amount
                 Text(
                     text = transaction.formatAmount(),
@@ -540,7 +540,7 @@ private fun BreakdownDialog(
     val currentPeriod = "${now.month.name.lowercase().replaceFirstChar { it.uppercase() }} 1-${now.dayOfMonth}"
     val lastMonth = now.minusMonths(1)
     val lastPeriod = "${lastMonth.month.name.lowercase().replaceFirstChar { it.uppercase() }} 1-${now.dayOfMonth}"
-    
+
     Dialog(onDismissRequest = onDismiss) {
         Card(
             modifier = Modifier
@@ -562,7 +562,7 @@ private fun BreakdownDialog(
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
-                
+
                 // Current Period Section
                 Text(
                     text = currentPeriod,
@@ -570,30 +570,30 @@ private fun BreakdownDialog(
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.primary
                 )
-                
+
                 BreakdownRow(
                     label = "Income",
                     amount = currentMonthIncome,
                     isIncome = true
                 )
-                
+
                 BreakdownRow(
                     label = "Expenses",
                     amount = currentMonthExpenses,
                     isIncome = false
                 )
-                
+
                 HorizontalDivider()
-                
+
                 BreakdownRow(
                     label = "Net Balance",
                     amount = currentMonthTotal,
                     isIncome = currentMonthTotal >= BigDecimal.ZERO,
                     isBold = true
                 )
-                
+
                 Spacer(modifier = Modifier.height(Spacing.sm))
-                
+
                 // Last Period Section
                 Text(
                     text = lastPeriod,
@@ -601,28 +601,28 @@ private fun BreakdownDialog(
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.primary
                 )
-                
+
                 BreakdownRow(
                     label = "Income",
                     amount = lastMonthIncome,
                     isIncome = true
                 )
-                
+
                 BreakdownRow(
                     label = "Expenses",
                     amount = lastMonthExpenses,
                     isIncome = false
                 )
-                
+
                 HorizontalDivider()
-                
+
                 BreakdownRow(
                     label = "Net Balance",
                     amount = lastMonthTotal,
                     isIncome = lastMonthTotal >= BigDecimal.ZERO,
                     isBold = true
                 )
-                
+
                 // Formula explanation
                 Spacer(modifier = Modifier.height(Spacing.sm))
                 Card(
@@ -633,14 +633,14 @@ private fun BreakdownDialog(
                 ) {
                     Text(
                         text = "Formula: Income - Expenses = Net Balance\n" +
-                               "Green (+) = Savings | Red (-) = Overspending",
+                                "Green (+) = Savings | Red (-) = Overspending",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.padding(Spacing.sm),
                         textAlign = TextAlign.Center
                     )
                 }
-                
+
                 // Close button
                 TextButton(
                     onClick = onDismiss,
@@ -757,7 +757,7 @@ private fun TransactionSummaryCards(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-  
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
@@ -811,7 +811,7 @@ private fun TransactionSummaryCards(
                 }
             }
         }
-        
+
         // Page Indicators
         Row(
             modifier = Modifier
@@ -851,7 +851,7 @@ private fun TransactionTypeCard(
 ) {
     val currentMonth = LocalDate.now().month.name.lowercase().replaceFirstChar { it.uppercase() }
     val now = LocalDate.now()
-    
+
     val subtitle = when {
         amount > BigDecimal.ZERO -> {
             when (title) {
@@ -870,7 +870,7 @@ private fun TransactionTypeCard(
             }
         }
     }
-    
+
     SummaryCard(
         title = "$emoji $title • $currentMonth",
         subtitle = subtitle,
@@ -964,4 +964,3 @@ private fun EnhancedCurrencySelector(
         }
     }
 }
-

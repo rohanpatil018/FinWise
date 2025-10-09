@@ -76,7 +76,7 @@ fun PermissionScreen(
         Spacer(modifier = Modifier.height(Spacing.md))
         
         Text(
-            text = "PennyWise can automatically detect and categorize your bank transactions from SMS messages, saving you time and effort.",
+            text = "FinWise can automatically detect and categorize your bank transactions from SMS messages, saving you time and effort.",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant

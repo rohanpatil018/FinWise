@@ -62,28 +62,24 @@ fun MainScreen(
             val context = LocalContext.current
             PennyWiseTopAppBar(
                 title = when (currentRoute) {
-                    "home" -> "PennyWise"
+                    "home" -> "FinWise"
                     "transactions" -> "Transactions"
                     "subscriptions" -> "Subscriptions"
                     "analytics" -> "Analytics"
-                    "chat" -> "PennyWise AI"
+                    "chat" -> "FinWise AI"
                     "settings" -> "Settings"
                     "categories" -> "Categories"
                     "unrecognized_sms" -> "Unrecognized Messages"
                     "manage_accounts" -> "Manage Accounts"
                     "add_account" -> "Add Account"
                     "faq" -> "Help & FAQ"
-                    else -> "PennyWise"
+                    else -> "FinWise"
                 },
                 showBackButton = currentRoute in listOf("chat", "settings", "subscriptions", "transactions", "categories", "unrecognized_sms", "manage_accounts", "add_account", "faq"),
                 showSettingsButton = currentRoute !in listOf("settings", "categories", "unrecognized_sms", "manage_accounts", "add_account", "faq"),
-                showDiscordButton = currentRoute !in listOf("settings", "categories", "unrecognized_sms", "manage_accounts", "add_account", "faq"), // Hide on these screens
                 onBackClick = { navController.popBackStack() },
-                onSettingsClick = { navController.navigate("settings") },
-                onDiscordClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/H3xWeMWjKQ"))
-                    context.startActivity(intent)
-                }
+                onSettingsClick = { navController.navigate("settings") }
+
             )
         },
         bottomBar = {
@@ -345,10 +341,8 @@ private fun PennyWiseTopAppBar(
     title: String,
     showBackButton: Boolean = false,
     showSettingsButton: Boolean = true,
-    showDiscordButton: Boolean = true,
     onBackClick: () -> Unit = {},
-    onSettingsClick: () -> Unit = {},
-    onDiscordClick: () -> Unit = {}
+    onSettingsClick: () -> Unit = {}
 ) {
     Column {
         TopAppBar(
@@ -367,15 +361,7 @@ private fun PennyWiseTopAppBar(
                 }
             },
             actions = {
-                if (showDiscordButton) {
-                    IconButton(onClick = onDiscordClick) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_discord),
-                            contentDescription = "Join Discord Community",
-                            tint = Color(0xFF5865F2) // Discord brand color
-                        )
-                    }
-                }
+
                 if (showSettingsButton) {
                     IconButton(onClick = onSettingsClick) {
                         Icon(
