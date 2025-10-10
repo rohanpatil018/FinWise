@@ -1,10 +1,8 @@
 # Privacy Policy
 
-**Last Updated: August 2025**
-
 ## Our Commitment to Privacy
 
-PennyWise AI is built with privacy as the core principle. We believe your financial data should remain yours alone.
+FinWise AI is built with privacy as the core principle. We believe your financial data should remain yours alone.
 
 ## 100% On-Device Processing
 
@@ -55,7 +53,7 @@ PennyWise AI is built with privacy as the core principle. We believe your financ
 
 ## Third-Party Services
 
-PennyWise AI does **NOT** use:
+FinWise AI does **NOT** use:
 - ❌ Cloud services or APIs (except CDN for model download)
 - ❌ Analytics services (Google Analytics, Firebase, etc.)
 - ❌ Crash reporting services
@@ -84,14 +82,14 @@ When you export your data:
 
 ## Open Source Transparency
 
-PennyWise AI is fully open source:
-- Review our code at [GitHub](https://github.com/sarim2000/pennywiseai-tracker)
+FinWise AI is fully open source:
+- Review our code at [GitHub](https://github.com/omkute10/FinWise)
 - Verify our privacy claims yourself
 - Contribute to make it even better
 
 ## Children's Privacy
 
-PennyWise AI is not directed at children under 13. We do not knowingly collect information from children.
+FinWise AI is not directed at children under 13. We do not knowingly collect information from children.
 
 ## Changes to Privacy Policy
 
@@ -99,12 +97,6 @@ Any changes to this privacy policy will be:
 - Updated in the app repository
 - Reflected in the "Last Updated" date
 - Communicated through release notes
-
-## Contact
-
-For privacy concerns or questions:
-- Open an issue on [GitHub](https://github.com/sarim2000/pennywiseai-tracker/issues)
-- Join our [Discord community](https://discord.gg/H3xWeMWjKQ)
 
 ## Summary
 
@@ -118,4 +110,4 @@ For privacy concerns or questions:
 
 ---
 
-*PennyWise AI - Privacy-first expense tracking with on-device AI*
+*FinWise AI - Privacy-first expense tracking with on-device AI*
